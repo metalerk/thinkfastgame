@@ -63,6 +63,10 @@ Check with us in case that you want to use any other programming language not sp
   - Using standalone build artifacts like Docker container with any supported container management tool, and if your solution happens to need more than one container, then provide the necessary instructions and assets to run all of them together as one.
   - And running the application in stand alone without any container tool. 
 
-## What happens next?
+## Running the app
 
-After providing the solution to us, we will internally review it, and if necessary, we will plan a session to discuss your solution, which can involve code change requests to be performed in the session.
+Simply run from the root directory:
+
+```bash
+docker-compose up --build
+```
