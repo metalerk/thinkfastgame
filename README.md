@@ -70,3 +70,9 @@ Simply run from the root directory:
 ```bash
 docker-compose up --build
 ```
+
+## Running tests
+
+```bash
+docker compose exec backend pytest tests/
+```
