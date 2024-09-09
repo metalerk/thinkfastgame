@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from redis.asyncio import Redis
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends, HTTPException
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,7 +21,15 @@ load_dotenv()
 app = FastAPI()
 
 # static files
-app.mount("/static", StaticFiles(directory=Path(__file__).parent.parent / "frontend"), name="static")
+frontend_path = Path(__file__).parent.parent / "frontend"
+
+def should_mount_frontend():
+    mount_frontend = os.getenv("TEST", "False").lower() == "false"
+    return mount_frontend
+
+if should_mount_frontend() and frontend_path.exists():
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # left for now but not in prod
@@ -31,8 +39,11 @@ app.add_middleware(
 )
 
 @app.get("/", response_class=HTMLResponse)
-async def serve_index():
-    return FileResponse(Path(__file__).parent.parent / "frontend" / "index.html")
+async def get_homepage():
+    if should_mount_frontend() and frontend_path.exists():
+        return FileResponse(frontend_path / "index.html")
+    else:
+        return JSONResponse({"error": "Frontend not available"})
 
 REDIS_URL = os.getenv("REDIS_URL")
 redis = None

@@ -1,11 +1,17 @@
-import pytest
+from unittest import mock
+from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
 
 
 client = TestClient(app)
+
+def mock_static_dir():
+    with mock.patch.object(Path, "exists", return_value=False):
+        yield
 
 def test_add_question():
     """Test to add a single question"""
