@@ -13,6 +13,7 @@ RUN pip install --disable-pip-version-check redis==4.6.0
 
 COPY backend/app/ /app
 COPY ../frontend /app/frontend
+COPY backend/tests /app/tests
 
 EXPOSE 8000
 
