@@ -1,0 +1,11 @@
+aiofiles
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+aioredis
+pydantic
+python-dotenv
+pytest
+pytest-asyncio
+httpx
